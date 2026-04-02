@@ -397,6 +397,17 @@ class PublishGuard:
                         continue
 
                     with tempfile.TemporaryDirectory() as tmpdir:
+                        # Path traversal protection (parity with tar filter="data")
+                        target = Path(tmpdir).resolve() / info.filename
+                        if not str(target).startswith(str(Path(tmpdir).resolve())):
+                            result.findings.append(Finding(
+                                rule_id="PKG-003",
+                                severity=Severity.CRITICAL,
+                                file_path=info.filename,
+                                message="Zip path traversal detected",
+                                detail=f"Entry attempts to escape extraction directory: {info.filename}",
+                            ))
+                            continue
                         zf.extract(info, tmpdir)
                         extracted = Path(tmpdir) / info.filename
                         self._check_file(result, info.filename, info.file_size, extracted)
@@ -506,9 +517,20 @@ class PublishGuard:
             ))
 
         # Rule: Secret patterns in file content
-        if full_path and size < 10 * 1024 * 1024:  # Only scan files < 10MB
+        if full_path:
             try:
-                content = full_path.read_bytes()
+                if size <= 50 * 1024 * 1024:
+                    # Full scan for files up to 50MB
+                    content = full_path.read_bytes()
+                else:
+                    # For files >50MB, scan first and last 1MB
+                    # (secrets cluster in headers, configs, and appended data)
+                    with open(full_path, "rb") as f:
+                        head = f.read(1024 * 1024)
+                        f.seek(max(0, size - 1024 * 1024))
+                        tail = f.read(1024 * 1024)
+                    content = head + tail
+
                 for pattern, description in SECRET_PATTERNS:
                     matches = pattern.findall(content)
                     if matches:

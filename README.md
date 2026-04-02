@@ -53,6 +53,7 @@ tenter scan ./dist --format sarif > results.sarif
 | **SIZE-001** | CRITICAL | Anomalously large files (>50 MB — the Claude Code map was 59.8 MB) |
 | **SIZE-002** | MEDIUM | Large files (>10 MB) |
 | **SIZE-003** | HIGH | Total package size exceeds threshold (>200 MB) |
+| **SIZE-004** | MEDIUM | Total package is large (>50 MB warning) |
 
 ### Secret Patterns Detected
 
