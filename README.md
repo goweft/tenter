@@ -1,3 +1,5 @@
+<p align="center"><img src="banner.svg" alt="tenter" width="100%"></p>
+
 # Tenter
 
 Pre-publish artifact integrity scanner. Detects source maps, debug artifacts, secrets, and sensitive files before they ship in your package.

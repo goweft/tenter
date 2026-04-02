@@ -1,0 +1,34 @@
+<svg width="1280" viewBox="0 0 680 280" xmlns="http://www.w3.org/2000/svg">
+<rect x="0" y="0" width="680" height="280" rx="12" fill="#f8f7f4"/>
+<g transform="translate(60, 50)">
+  <rect x="0" y="0" width="180" height="180" rx="4" fill="none" stroke="#2c2c2a" stroke-width="2" opacity="0.15"/>
+  <line x1="30" y1="0" x2="30" y2="180" stroke="#378ADD" stroke-width="1.5" opacity="0.6"/>
+  <line x1="60" y1="0" x2="60" y2="180" stroke="#378ADD" stroke-width="1.5" opacity="0.7"/>
+  <line x1="90" y1="0" x2="90" y2="180" stroke="#378ADD" stroke-width="1.5" opacity="0.8"/>
+  <line x1="120" y1="0" x2="120" y2="180" stroke="#378ADD" stroke-width="1.5" opacity="0.7"/>
+  <line x1="150" y1="0" x2="150" y2="180" stroke="#378ADD" stroke-width="1.5" opacity="0.6"/>
+  <line x1="0" y1="30" x2="180" y2="30" stroke="#1D9E75" stroke-width="1.5" opacity="0.6"/>
+  <line x1="0" y1="60" x2="180" y2="60" stroke="#1D9E75" stroke-width="1.5" opacity="0.7"/>
+  <line x1="0" y1="90" x2="180" y2="90" stroke="#1D9E75" stroke-width="1.5" opacity="0.8"/>
+  <line x1="0" y1="120" x2="180" y2="120" stroke="#1D9E75" stroke-width="1.5" opacity="0.7"/>
+  <line x1="0" y1="150" x2="180" y2="150" stroke="#1D9E75" stroke-width="1.5" opacity="0.6"/>
+  <circle cx="30" cy="0" r="3" fill="#378ADD" opacity="0.8"/>
+  <circle cx="60" cy="0" r="3" fill="#378ADD" opacity="0.8"/>
+  <circle cx="90" cy="0" r="3" fill="#378ADD" opacity="0.8"/>
+  <circle cx="120" cy="0" r="3" fill="#378ADD" opacity="0.8"/>
+  <circle cx="150" cy="0" r="3" fill="#378ADD" opacity="0.8"/>
+  <circle cx="30" cy="180" r="3" fill="#378ADD" opacity="0.8"/>
+  <circle cx="60" cy="180" r="3" fill="#378ADD" opacity="0.8"/>
+  <circle cx="90" cy="180" r="3" fill="#378ADD" opacity="0.8"/>
+  <circle cx="120" cy="180" r="3" fill="#378ADD" opacity="0.8"/>
+  <circle cx="150" cy="180" r="3" fill="#378ADD" opacity="0.8"/>
+  <path d="M78 78 L90 70 L102 78 L102 100 C102 110 90 118 90 118 C90 118 78 110 78 100Z" fill="none" stroke="#1D9E75" stroke-width="2" opacity="0.9"/>
+  <path d="M84 94 L88 98 L96 86" fill="none" stroke="#1D9E75" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<text x="280" y="110" font-family="system-ui, -apple-system, sans-serif" font-size="42" font-weight="500" fill="#2c2c2a" letter-spacing="-1">tenter</text>
+<text x="280" y="145" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="400" fill="#5f5e5a">pre-publish artifact integrity scanner</text>
+<text x="280" y="185" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="400" fill="#888780">holds your package taut before release</text>
+<text x="280" y="202" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="400" fill="#888780">catches source maps, debug artifacts, and secrets</text>
+<rect x="280" y="222" width="56" height="22" rx="4" fill="#f1efe8" stroke="#d3d1c7" stroke-width="0.5"/>
+<text x="308" y="237" font-family="monospace" font-size="10" font-weight="400" fill="#888780" text-anchor="middle">goweft</text>
+</svg>
