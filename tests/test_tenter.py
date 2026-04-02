@@ -394,6 +394,32 @@ class TestCLI:
 
 # ─── Runner ──────────────────────────────────────────────────────────────────
 
+
+class TestReDoSProtection:
+    """Tests for SEC-002 ReDoS mitigations."""
+
+    def test_secret_scan_respects_time_budget(self):
+        """A zero-length budget triggers SEC-003 on any scanned file."""
+        guard = PublishGuard(config={"content_scan_timeout_secs": 0.0})
+        tmpdir = make_temp_dir_with_files({
+            "dist/bundle.js": b"console.log('hello world');",
+        })
+        result = guard.scan_directory(tmpdir)
+        sec003 = [f for f in result.findings if f.rule_id == "SEC-003"]
+        assert len(sec003) == 1, f"Expected 1 SEC-003, got {len(sec003)}"
+        assert sec003[0].severity == Severity.MEDIUM
+        assert "manual review" in sec003[0].message
+
+    def test_sec003_absent_under_normal_budget(self):
+        """Normal content scans within the default 5s budget produce no false SEC-003."""
+        guard = PublishGuard()
+        tmpdir = make_temp_dir_with_files({
+            "dist/bundle.js": b"console.log('hello');",
+        })
+        result = guard.scan_directory(tmpdir)
+        assert not any(f.rule_id == "SEC-003" for f in result.findings)
+
+
 def run_tests():
     """Simple test runner. No dependencies required."""
     test_classes = [
@@ -408,6 +434,7 @@ def run_tests():
         TestOutputFormatters,
         TestAutoDetection,
         TestCLI,
+        TestReDoSProtection,
     ]
 
     total = 0

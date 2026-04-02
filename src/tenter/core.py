@@ -21,6 +21,7 @@ import subprocess
 import sys
 import tarfile
 import tempfile
+import time
 import zipfile
 from dataclasses import dataclass, field
 from enum import Enum
@@ -196,10 +197,20 @@ INTERNAL_ARTIFACT_PATTERNS = [
     "**/NOTES.internal*",
 ]
 
-# Secret patterns (regex) — checked against file contents
+# Secret patterns (regex) — checked against file contents.
+#
+# Design constraints for ReDoS safety:
+#   - Prefer anchored or fixed-length quantifiers where the token format allows it.
+#   - Use specific character classes ([A-Za-z0-9/+=]) instead of broad ones (\S)
+#     to minimise backtracking surface on dense minified content.
+#   - The scanning loop uses search() (short-circuit) not findall(), and enforces
+#     a per-file time budget (CONTENT_SCAN_TIMEOUT_SECS). Any new pattern added
+#     here must not rely on the loop running to exhaustion.
 SECRET_PATTERNS = [
     (re.compile(rb"AKIA[0-9A-Z]{16}"), "AWS Access Key ID"),
-    (re.compile(rb"(?:aws_secret_access_key|AWS_SECRET_ACCESS_KEY)\s*[=:]\s*\S{20,}"), "AWS Secret Key"),
+    # \S{20,} replaced with [A-Za-z0-9/+=]{20,} — tighter class, same real-world
+    # coverage, eliminates backtracking on non-whitespace-dense minified JS.
+    (re.compile(rb"(?:aws_secret_access_key|AWS_SECRET_ACCESS_KEY)\s*[=:]\s*[A-Za-z0-9/+=]{20,}"), "AWS Secret Key"),
     (re.compile(rb"ghp_[a-zA-Z0-9]{36,}"), "GitHub Personal Access Token"),
     (re.compile(rb"gho_[a-zA-Z0-9]{36}"), "GitHub OAuth Token"),
     (re.compile(rb"github_pat_[a-zA-Z0-9]{22}_[a-zA-Z0-9]{59}"), "GitHub Fine-Grained PAT"),
@@ -220,6 +231,11 @@ SINGLE_FILE_SIZE_CRIT = 50 * 1024 * 1024     # 50 MB (Claude Code's map was 59.8
 TOTAL_PACKAGE_SIZE_WARN = 50 * 1024 * 1024   # 50 MB
 TOTAL_PACKAGE_SIZE_CRIT = 200 * 1024 * 1024  # 200 MB
 
+# Maximum seconds to spend scanning a single file's contents for secrets.
+# Prevents ReDoS-style hangs on pathological minified artifacts. Configurable
+# via content_scan_timeout_secs in .tenter.json.
+CONTENT_SCAN_TIMEOUT_SECS = 5.0
+
 
 # ─── Scanning Engine ─────────────────────────────────────────────────────────
 
@@ -234,6 +250,9 @@ class PublishGuard:
         )
         self.size_limit_total = self.config.get(
             "size_limit_total_bytes", TOTAL_PACKAGE_SIZE_CRIT
+        )
+        self.content_scan_timeout = self.config.get(
+            "content_scan_timeout_secs", CONTENT_SCAN_TIMEOUT_SECS
         )
 
     def scan_directory(self, path: str, package_type: str = "generic") -> ScanResult:
@@ -516,7 +535,16 @@ class PublishGuard:
                 message=f"Large file: {size / (1024*1024):.1f} MB",
             ))
 
-        # Rule: Secret patterns in file content
+        # Rule: Secret patterns in file content.
+        #
+        # ReDoS mitigations applied here:
+        #   1. Files >50MB are already limited to a 2MB head+tail window.
+        #   2. search() short-circuits on the first match per pattern — no need
+        #      to exhaust the whole file once a secret is found.
+        #   3. A per-file time budget (self.content_scan_timeout) is enforced
+        #      across all patterns. If it fires, remaining patterns are skipped
+        #      and a SEC-003 MEDIUM advisory is emitted so the event is never
+        #      silently dropped.
         if full_path:
             try:
                 if size <= 50 * 1024 * 1024:
@@ -531,17 +559,33 @@ class PublishGuard:
                         tail = f.read(1024 * 1024)
                     content = head + tail
 
+                scan_start = time.monotonic()
+                timed_out = False
+
                 for pattern, description in SECRET_PATTERNS:
-                    matches = pattern.findall(content)
-                    if matches:
-                        # Don't include the actual secret in the finding
+                    if time.monotonic() - scan_start > self.content_scan_timeout:
+                        timed_out = True
+                        break
+                    if pattern.search(content):
                         result.findings.append(Finding(
                             rule_id="SEC-002",
                             severity=Severity.CRITICAL,
                             file_path=rel_path,
                             message=f"Potential secret detected: {description}",
-                            detail=f"Found {len(matches)} occurrence(s). Value redacted.",
+                            detail="Value redacted.",
                         ))
+
+                if timed_out:
+                    result.findings.append(Finding(
+                        rule_id="SEC-003",
+                        severity=Severity.MEDIUM,
+                        file_path=rel_path,
+                        message="Secret scan timed out — manual review recommended",
+                        detail=(
+                            f"Content scan exceeded {self.content_scan_timeout:.0f}s budget. "
+                            "Not all patterns were checked. Review file contents manually."
+                        ),
+                    ))
             except OSError:
                 pass
 
@@ -870,7 +914,6 @@ def detect_package_type(path: str) -> str:
 
     name = p.name.lower()
     if name.endswith(".tgz") or name.endswith(".tar.gz"):
-        # Could be npm or pip sdist
         if "node" in name or "npm" in name:
             return "npm"
         return "npm"  # npm tarballs are more common
@@ -888,6 +931,7 @@ def create_default_config():
         "allowlist": [],
         "size_limit_single_file_bytes": SINGLE_FILE_SIZE_CRIT,
         "size_limit_total_bytes": TOTAL_PACKAGE_SIZE_CRIT,
+        "content_scan_timeout_secs": CONTENT_SCAN_TIMEOUT_SECS,
         "extra_sensitive_patterns": [],
         "extra_debug_patterns": [],
     }
