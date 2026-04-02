@@ -2,19 +2,16 @@
 
 # Tenter
 
-Pre-publish artifact integrity scanner. Detects source maps, debug artifacts, secrets, and sensitive files before they ship in your package.
+Pre-publish artifact integrity scanner. Catches source maps, debug artifacts, secrets, and sensitive files in your package — the things that slip through `.gitignore` and land in production.
 
-**Born from the Claude Code npm source map leak (March 31, 2026)** — where a single missing `.npmignore` entry shipped 512,000 lines of proprietary source code to the public npm registry via a 59.8 MB source map file.
+Existing tools scan source repos for CVEs and credentials. None inspect the **final published artifact** for debug files, oversized anomalies, or internal development artifacts that should never ship. Tenter fills that gap.
 
 ## Why This Exists
 
-On March 31, 2026, Anthropic accidentally published Claude Code's entire TypeScript source via an included `.map` file in npm package version 2.1.88. Within hours, the code was mirrored across 82,000+ GitHub forks, internal model codenames were exposed, and attackers launched supply chain attacks using typosquatted package names targeting developers trying to build from the leaked source.
+Every package manager has the same blind spot: what you publish is not what you lint. A `.env` file excluded from git still ends up in `npm pack`. A 60MB source map survives tree-shaking because nobody checks the tarball. Internal directories like `.claude/` or `__pycache__/` ride along because no gate exists between `git push` and `npm publish`.
 
-The root cause was preventable: **no automated check validated the package contents before publish.**
+The Claude Code npm leak (March 31, 2026) proved how costly this gap is — a single missing `.npmignore` entry shipped 512,000 lines of proprietary source via a 59.8MB source map, triggering 82,000+ forks and supply chain attacks within hours. But the failure class is general: **any team without a pre-publish artifact check is exposed.**
 
-Existing tools scan for known CVEs and secrets in source repos. None inspect the **final published artifact** for debug files, source maps, oversized anomalies, or internal development artifacts that should never ship. `tenter` fills that gap.
-
-## Quick Start
 
 ```bash
 # Install
