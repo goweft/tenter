@@ -1,0 +1,10 @@
+{
+  "allowlist": [
+    ".git/**",
+    ".github/**",
+    "tests/**",
+    "**/__pycache__/**",
+    "*.svg",
+    "*.md"
+  ]
+}
