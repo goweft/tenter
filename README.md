@@ -221,6 +221,8 @@ Running `tenter scan` on Claude Code v2.1.88 before publish would have produced:
 
 - **[ratine](https://github.com/goweft/ratine)** — Agent memory poisoning detector
 
+- **[crocking](https://github.com/goweft/crocking)** — AI authorship detector for git repositories
+
 ## License
 
 MIT — see [LICENSE](LICENSE).
