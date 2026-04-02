@@ -1,0 +1,47 @@
+<svg width="680" height="520" viewBox="0 0 680 520" xmlns="http://www.w3.org/2000/svg">
+<style>
+  @keyframes appear { from { opacity: 0 } to { opacity: 1 } }
+  .term-bg { fill: #1a1b26; }
+  .term-bar { fill: #24283b; }
+  .term-text { font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace; font-size: 12px; fill: #a9b1d6; }
+  .term-green { fill: #9ece6a; }
+  .term-red { fill: #f7768e; }
+  .term-yellow { fill: #e0af68; }
+  .term-cyan { fill: #7dcfff; }
+  .term-gray { fill: #565f89; }
+  .term-white { fill: #c0caf5; }
+  .term-bold { font-weight: 600; }
+  .line { opacity: 0; animation: appear 0.15s ease-out forwards; }
+</style>
+<rect class="term-bg" width="680" height="520" rx="8"/>
+<rect class="term-bar" width="680" height="32" rx="8"/>
+<rect class="term-bg" x="0" y="24" width="680" height="8"/>
+<circle cx="16" cy="16" r="5.5" fill="#f7768e"/>
+<circle cx="34" cy="16" r="5.5" fill="#e0af68"/>
+<circle cx="52" cy="16" r="5.5" fill="#9ece6a"/>
+<text class="term-text term-gray" x="340" y="20" text-anchor="middle" font-size="11">tenter — pre-publish scan</text>
+<text class="term-text line" y="58" x="16" style="animation-delay:0.3s"><tspan class="term-green">$</tspan><tspan class="term-white"> tenter scan ./my-app</tspan></text>
+<text class="term-text term-white term-bold line" y="86" x="16" style="animation-delay:1.0s">═══ tenter scan results ═══</text>
+<text class="term-text term-gray line" y="106" x="24" style="animation-delay:1.3s">Package type: npm</text>
+<text class="term-text term-gray line" y="122" x="24" style="animation-delay:1.4s">Path: ./my-app</text>
+<text class="term-text term-gray line" y="138" x="24" style="animation-delay:1.5s">Files: 5    Size: 0.3 KB</text>
+<text class="term-text term-red term-bold line" y="166" x="24" style="animation-delay:2.0s">┌─ CRITICAL (4)</text>
+<text class="term-text term-red line" y="184" x="24" style="animation-delay:2.2s">│ ✖ [SEC-001] .env</text>
+<text class="term-text term-gray line" y="200" x="24" style="animation-delay:2.3s">│   Sensitive file detected in package</text>
+<text class="term-text term-red line" y="218" x="24" style="animation-delay:2.5s">│ ✖ [SEC-002] .env</text>
+<text class="term-text term-gray line" y="234" x="24" style="animation-delay:2.6s">│   Potential secret: AWS Access Key ID</text>
+<text class="term-text term-red line" y="252" x="24" style="animation-delay:2.8s">│ ✖ [SEC-002] .env</text>
+<text class="term-text term-gray line" y="268" x="24" style="animation-delay:2.9s">│   Potential secret: AWS Secret Key</text>
+<text class="term-text term-red line" y="286" x="24" style="animation-delay:3.1s">│ ✖ [MAP-001] dist/app.js.map</text>
+<text class="term-text term-gray line" y="302" x="24" style="animation-delay:3.2s">│   Source map file detected in package</text>
+<text class="term-text term-red line" y="320" x="24" style="animation-delay:3.4s">└─────────────────────────────────────────</text>
+<text class="term-text term-yellow term-bold line" y="344" x="24" style="animation-delay:3.7s">┌─ HIGH (1)</text>
+<text class="term-text term-yellow line" y="362" x="24" style="animation-delay:3.9s">│ ✖ [MAP-002] dist/app.js</text>
+<text class="term-text term-gray line" y="378" x="24" style="animation-delay:4.0s">│   sourceMappingURL reference found</text>
+<text class="term-text term-yellow line" y="396" x="24" style="animation-delay:4.2s">└─────────────────────────────────────────</text>
+<text class="term-text term-cyan term-bold line" y="420" x="24" style="animation-delay:4.5s">┌─ MEDIUM (1)</text>
+<text class="term-text term-cyan line" y="438" x="24" style="animation-delay:4.7s">│ ⚠ [INT-001] .claude/settings.json</text>
+<text class="term-text term-gray line" y="454" x="24" style="animation-delay:4.8s">│   Internal/development artifact detected</text>
+<text class="term-text term-cyan line" y="472" x="24" style="animation-delay:5.0s">└─────────────────────────────────────────</text>
+<text class="term-text term-red term-bold line" y="500" x="24" style="animation-delay:5.5s">✖ BLOCKED: 6 finding(s) — 4 critical, 1 high. DO NOT PUBLISH.</text>
+</svg>

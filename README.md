@@ -41,45 +41,7 @@ tenter scan ./dist --format sarif > results.sarif
 
 ## See It Work
 
-```
-$ tenter scan ./my-app
-
-═══ tenter scan results ═══
-  Package type: npm
-  Path: ./my-app
-  Files: 5
-  Size: 0.3 KB (0.00 MB)
-
-  ┌─ CRITICAL (4)
-  │ ✖ [SEC-001] .env
-  │   Sensitive file detected in package
-  │   Matched pattern: .env
-  │ ✖ [SEC-002] .env
-  │   Potential secret detected: AWS Access Key ID
-  │   Found 1 occurrence(s). Value redacted.
-  │ ✖ [SEC-002] .env
-  │   Potential secret detected: AWS Secret Key
-  │   Found 1 occurrence(s). Value redacted.
-  │ ✖ [MAP-001] dist/app.js.map
-  │   Source map file detected in package
-  │   Source maps expose original source code. This is the exact
-  │   vulnerability class that leaked Claude Code's 512K-line codebase.
-  └─────────────────────────────────────────────────────────
-
-  ┌─ HIGH (1)
-  │ ✖ [MAP-002] dist/app.js
-  │   sourceMappingURL reference found
-  │   Points to: app.js.map
-  └─────────────────────────────────────────────────────────
-
-  ┌─ MEDIUM (1)
-  │ ⚠ [INT-001] .claude/settings.json
-  │   Internal/development artifact detected in package
-  │   Matched pattern: **/.claude/**
-  └─────────────────────────────────────────────────────────
-
-  ✖ BLOCKED: 6 finding(s) — 4 critical, 1 high. DO NOT PUBLISH.
-```
+<p align="center"><img src="demo.svg" alt="tenter demo" width="100%"></p>
 
 ## What It Catches
 
