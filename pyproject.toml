@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=64", "setuptools-scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tenter"
+version = "0.1.0"
+description = "Tenter — pre-publish artifact integrity scanner. Holds your package taut before release, catching source maps, debug artifacts, and secrets before they ship."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.9"
+authors = [
+    { name = "goweft", email = "goweft@proton.me" },
+]
+keywords = [
+    "security", "npm", "pip", "cargo", "supply-chain",
+    "source-map", "publish", "ci", "scanner", "artifact",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Security",
+    "Topic :: Software Development :: Build Tools",
+    "Topic :: Software Development :: Quality Assurance",
+]
+
+[project.urls]
+Homepage = "https://github.com/goweft/tenter"
+Repository = "https://github.com/goweft/tenter"
+Issues = "https://github.com/goweft/tenter/issues"
+
+[project.scripts]
+tenter = "tenter:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

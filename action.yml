@@ -1,0 +1,69 @@
+name: "Tenter"
+description: "Tenter — pre-publish artifact integrity scanner — detects source maps, debug artifacts, secrets, and sensitive files before they ship."
+author: "goweft"
+
+branding:
+  icon: "shield"
+  color: "blue"
+
+inputs:
+  target:
+    description: "Path to scan (directory, tarball, or wheel)"
+    required: false
+    default: "."
+  format:
+    description: "Output format: human, json, or sarif"
+    required: false
+    default: "sarif"
+  fail-on:
+    description: "Minimum severity to fail: critical, high, medium, low, info"
+    required: false
+    default: "high"
+  package-type:
+    description: "Package type: npm, pip, cargo, or auto"
+    required: false
+    default: "auto"
+  upload-sarif:
+    description: "Upload SARIF results to GitHub Code Scanning"
+    required: false
+    default: "true"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+
+    - name: Install tenter
+      shell: bash
+      run: pip install weft-tenter
+
+    - name: Run scan
+      id: scan
+      shell: bash
+      run: |
+        set +e
+        tenter scan "${{ inputs.target }}" \
+          --type "${{ inputs.package-type }}" \
+          --format "${{ inputs.format }}" \
+          --fail-on "${{ inputs.fail-on }}" \
+          --no-color \
+          > tenter-results.${{ inputs.format == 'sarif' && 'sarif' || inputs.format == 'json' && 'json' || 'txt' }}
+        echo "exit_code=$?" >> $GITHUB_OUTPUT
+
+    - name: Upload SARIF
+      if: inputs.format == 'sarif' && inputs.upload-sarif == 'true' && always()
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: tenter-results.sarif
+
+    - name: Check result
+      shell: bash
+      run: |
+        if [ "${{ steps.scan.outputs.exit_code }}" != "0" ]; then
+          echo "::error::tenter found issues at or above ${{ inputs.fail-on }} severity"
+          cat tenter-results.*
+          exit ${{ steps.scan.outputs.exit_code }}
+        fi
