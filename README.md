@@ -254,11 +254,10 @@ Running `tenter scan` on Claude Code v2.1.88 before publish would have produced:
   ✖ BLOCKED: 3 finding(s) — 2 critical, 1 high. DO NOT PUBLISH.
 ```
 
-## Part of the WEFT Ecosystem
+## Also by goweft
 
-`tenter` is built by [goweft](https://github.com/goweft) as part of the WEFT security tooling ecosystem. It complements:
-
-- **Heddle** — Self-hosted MCP mesh runtime with security architecture mapped to OWASP Agentic Top 10
+- **[heddle](https://github.com/goweft/heddle)** — Policy-and-trust layer for MCP tool servers
+- **[unshear](https://github.com/goweft/unshear)** — AI agent fork divergence detector
 
 ## License
 
