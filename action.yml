@@ -1,4 +1,4 @@
-name: "Tenter"
+name: "Tenter Scan"
 description: "Pre-publish artifact integrity scanner. Catches source maps, debug artifacts, secrets, and sensitive files before they ship."
 author: "goweft"
 
