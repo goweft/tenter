@@ -219,6 +219,8 @@ Running `tenter scan` on Claude Code v2.1.88 before publish would have produced:
 - **[heddle](https://github.com/goweft/heddle)** — Policy-and-trust layer for MCP tool servers
 - **[unshear](https://github.com/goweft/unshear)** — AI agent fork divergence detector
 
+- **[ratine](https://github.com/goweft/ratine)** — Agent memory poisoning detector
+
 ## License
 
 MIT — see [LICENSE](LICENSE).
