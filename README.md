@@ -215,7 +215,6 @@ Running `tenter scan` on Claude Code v2.1.88 before publish would have produced:
 `tenter` is built by [goweft](https://github.com/goweft) as part of the WEFT security tooling ecosystem. It complements:
 
 - **Heddle** — Self-hosted MCP mesh runtime with security architecture mapped to OWASP Agentic Top 10
-- **WEFT Intelligence** — Market intelligence and threat monitoring agents
 
 ## License
 
