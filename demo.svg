@@ -1,47 +1,106 @@
-<svg width="680" height="520" viewBox="0 0 680 520" xmlns="http://www.w3.org/2000/svg">
+<svg width="660" height="600" viewBox="0 0 660 600" xmlns="http://www.w3.org/2000/svg">
 <style>
-  @keyframes appear { from { opacity: 0 } to { opacity: 1 } }
-  .term-bg { fill: #1a1b26; }
-  .term-bar { fill: #24283b; }
-  .term-text { font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace; font-size: 12px; fill: #a9b1d6; }
-  .term-green { fill: #9ece6a; }
-  .term-red { fill: #f7768e; }
-  .term-yellow { fill: #e0af68; }
-  .term-cyan { fill: #7dcfff; }
-  .term-gray { fill: #565f89; }
-  .term-white { fill: #c0caf5; }
-  .term-bold { font-weight: 600; }
-  .line { opacity: 0; animation: appear 0.15s ease-out forwards; }
+  @keyframes l1  {0%,4.2%{opacity:0}4.7%{opacity:1}95.8%{opacity:1}100%{opacity:0}}
+  @keyframes l2  {0%,8.3%{opacity:0}8.8%{opacity:1}95.8%{opacity:1}100%{opacity:0}}
+  @keyframes l3  {0%,10.8%{opacity:0}11.3%{opacity:1}95.8%{opacity:1}100%{opacity:0}}
+  @keyframes l4  {0%,11.7%{opacity:0}12.2%{opacity:1}95.8%{opacity:1}100%{opacity:0}}
+  @keyframes l5  {0%,12.5%{opacity:0}13.0%{opacity:1}95.8%{opacity:1}100%{opacity:0}}
+  @keyframes l6  {0%,13.3%{opacity:0}13.8%{opacity:1}95.8%{opacity:1}100%{opacity:0}}
+  @keyframes l7  {0%,16.7%{opacity:0}17.2%{opacity:1}95.8%{opacity:1}100%{opacity:0}}
+  @keyframes l8  {0%,18.3%{opacity:0}18.8%{opacity:1}95.8%{opacity:1}100%{opacity:0}}
+  @keyframes l9  {0%,19.6%{opacity:0}20.1%{opacity:1}95.8%{opacity:1}100%{opacity:0}}
+  @keyframes l10 {0%,20.8%{opacity:0}21.3%{opacity:1}95.8%{opacity:1}100%{opacity:0}}
+  @keyframes l11 {0%,22.5%{opacity:0}23.0%{opacity:1}95.8%{opacity:1}100%{opacity:0}}
+  @keyframes l12 {0%,23.8%{opacity:0}24.3%{opacity:1}95.8%{opacity:1}100%{opacity:0}}
+  @keyframes l13 {0%,25.0%{opacity:0}25.5%{opacity:1}95.8%{opacity:1}100%{opacity:0}}
+  @keyframes l14 {0%,26.7%{opacity:0}27.2%{opacity:1}95.8%{opacity:1}100%{opacity:0}}
+  @keyframes l15 {0%,27.9%{opacity:0}28.4%{opacity:1}95.8%{opacity:1}100%{opacity:0}}
+  @keyframes l16 {0%,29.2%{opacity:0}29.7%{opacity:1}95.8%{opacity:1}100%{opacity:0}}
+  @keyframes l17 {0%,30.4%{opacity:0}30.9%{opacity:1}95.8%{opacity:1}100%{opacity:0}}
+  @keyframes l18 {0%,33.3%{opacity:0}33.8%{opacity:1}95.8%{opacity:1}100%{opacity:0}}
+  @keyframes l19 {0%,35.0%{opacity:0}35.5%{opacity:1}95.8%{opacity:1}100%{opacity:0}}
+  @keyframes l20 {0%,36.3%{opacity:0}36.8%{opacity:1}95.8%{opacity:1}100%{opacity:0}}
+  @keyframes l21 {0%,37.5%{opacity:0}38.0%{opacity:1}95.8%{opacity:1}100%{opacity:0}}
+  @keyframes l22 {0%,38.8%{opacity:0}39.3%{opacity:1}95.8%{opacity:1}100%{opacity:0}}
+  @keyframes l23 {0%,41.7%{opacity:0}42.2%{opacity:1}95.8%{opacity:1}100%{opacity:0}}
+  @keyframes l24 {0%,43.3%{opacity:0}43.8%{opacity:1}95.8%{opacity:1}100%{opacity:0}}
+  @keyframes l25 {0%,44.6%{opacity:0}45.1%{opacity:1}95.8%{opacity:1}100%{opacity:0}}
+  @keyframes l26 {0%,45.8%{opacity:0}46.3%{opacity:1}95.8%{opacity:1}100%{opacity:0}}
+  @keyframes l27 {0%,47.1%{opacity:0}47.6%{opacity:1}95.8%{opacity:1}100%{opacity:0}}
+  @keyframes l28 {0%,54.2%{opacity:0}54.7%{opacity:1}95.8%{opacity:1}100%{opacity:0}}
+  .t{font-family:'JetBrains Mono','SF Mono','Fira Code',Consolas,'Courier New',monospace;font-size:13px}
 </style>
-<rect class="term-bg" width="680" height="520" rx="8"/>
-<rect class="term-bar" width="680" height="32" rx="8"/>
-<rect class="term-bg" x="0" y="24" width="680" height="8"/>
-<circle cx="16" cy="16" r="5.5" fill="#f7768e"/>
-<circle cx="34" cy="16" r="5.5" fill="#e0af68"/>
-<circle cx="52" cy="16" r="5.5" fill="#9ece6a"/>
-<text class="term-text term-gray" x="340" y="20" text-anchor="middle" font-size="11">tenter — pre-publish scan</text>
-<text class="term-text line" y="58" x="16" style="animation-delay:0.3s"><tspan class="term-green">$</tspan><tspan class="term-white"> tenter scan ./my-app</tspan></text>
-<text class="term-text term-white term-bold line" y="86" x="16" style="animation-delay:1.0s">═══ tenter scan results ═══</text>
-<text class="term-text term-gray line" y="106" x="24" style="animation-delay:1.3s">Package type: npm</text>
-<text class="term-text term-gray line" y="122" x="24" style="animation-delay:1.4s">Path: ./my-app</text>
-<text class="term-text term-gray line" y="138" x="24" style="animation-delay:1.5s">Files: 5    Size: 0.3 KB</text>
-<text class="term-text term-red term-bold line" y="166" x="24" style="animation-delay:2.0s">┌─ CRITICAL (4)</text>
-<text class="term-text term-red line" y="184" x="24" style="animation-delay:2.2s">│ ✖ [SEC-001] .env</text>
-<text class="term-text term-gray line" y="200" x="24" style="animation-delay:2.3s">│   Sensitive file detected in package</text>
-<text class="term-text term-red line" y="218" x="24" style="animation-delay:2.5s">│ ✖ [SEC-002] .env</text>
-<text class="term-text term-gray line" y="234" x="24" style="animation-delay:2.6s">│   Potential secret: AWS Access Key ID</text>
-<text class="term-text term-red line" y="252" x="24" style="animation-delay:2.8s">│ ✖ [SEC-002] .env</text>
-<text class="term-text term-gray line" y="268" x="24" style="animation-delay:2.9s">│   Potential secret: AWS Secret Key</text>
-<text class="term-text term-red line" y="286" x="24" style="animation-delay:3.1s">│ ✖ [MAP-001] dist/app.js.map</text>
-<text class="term-text term-gray line" y="302" x="24" style="animation-delay:3.2s">│   Source map file detected in package</text>
-<text class="term-text term-red line" y="320" x="24" style="animation-delay:3.4s">└─────────────────────────────────────────</text>
-<text class="term-text term-yellow term-bold line" y="344" x="24" style="animation-delay:3.7s">┌─ HIGH (1)</text>
-<text class="term-text term-yellow line" y="362" x="24" style="animation-delay:3.9s">│ ✖ [MAP-002] dist/app.js</text>
-<text class="term-text term-gray line" y="378" x="24" style="animation-delay:4.0s">│   sourceMappingURL reference found</text>
-<text class="term-text term-yellow line" y="396" x="24" style="animation-delay:4.2s">└─────────────────────────────────────────</text>
-<text class="term-text term-cyan term-bold line" y="420" x="24" style="animation-delay:4.5s">┌─ MEDIUM (1)</text>
-<text class="term-text term-cyan line" y="438" x="24" style="animation-delay:4.7s">│ ⚠ [INT-001] .claude/settings.json</text>
-<text class="term-text term-gray line" y="454" x="24" style="animation-delay:4.8s">│   Internal/development artifact detected</text>
-<text class="term-text term-cyan line" y="472" x="24" style="animation-delay:5.0s">└─────────────────────────────────────────</text>
-<text class="term-text term-red term-bold line" y="500" x="24" style="animation-delay:5.5s">✖ BLOCKED: 6 finding(s) — 4 critical, 1 high. DO NOT PUBLISH.</text>
+
+<!-- window chrome -->
+<rect width="660" height="600" rx="8" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
+<rect width="660" height="32" rx="8" fill="#161b22"/>
+<rect y="24" width="660" height="8" fill="#161b22"/>
+<circle cx="20" cy="16" r="6" fill="#ff5f56"/>
+<circle cx="40" cy="16" r="6" fill="#ffbd2e"/>
+<circle cx="60" cy="16" r="6" fill="#27c93f"/>
+<text class="t" x="330" y="21" text-anchor="middle" fill="#6e7681" font-size="11">tenter &#x2014; pre-publish scan</text>
+
+<!-- clip to content area -->
+<defs><clipPath id="cp"><rect x="1" y="33" width="658" height="566"/></clipPath></defs>
+<g clip-path="url(#cp)">
+
+<!-- L1: prompt -->
+<text class="t" x="16" y="56" opacity="0" style="animation:l1 12s infinite"><tspan fill="#3fb950">$</tspan><tspan fill="#c9d1d9"> tenter scan ./payments-sdk</tspan></text>
+
+<!-- L2: title  \033[1m = bold #e6edf3 -->
+<text class="t" x="16" y="82" fill="#e6edf3" font-weight="700" opacity="0" style="animation:l2 12s infinite">&#x2550;&#x2550;&#x2550; tenter scan results &#x2550;&#x2550;&#x2550;</text>
+
+<!-- L3-L6: scan summary  plain #c9d1d9, 2-space indent via x=32 -->
+<text class="t" x="32" y="100" fill="#c9d1d9" opacity="0" style="animation:l3 12s infinite">Package type: npm</text>
+<text class="t" x="32" y="118" fill="#c9d1d9" opacity="0" style="animation:l4 12s infinite">Path: ./payments-sdk</text>
+<text class="t" x="32" y="136" fill="#c9d1d9" opacity="0" style="animation:l5 12s infinite">Files: 8</text>
+<text class="t" x="32" y="154" fill="#c9d1d9" opacity="0" style="animation:l6 12s infinite">Size: 61.3 KB (0.06 MB)</text>
+
+<!-- CRITICAL block  \033[91m = #ff7b72 -->
+<text class="t" x="32" y="180" fill="#ff7b72" opacity="0" style="animation:l7 12s infinite">&#x250c;&#x2500; CRITICAL (3)</text>
+
+<!-- MAP-001  file=red  message=plain  detail=\033[2m=#6e7681 -->
+<text class="t" x="32" y="198" fill="#ff7b72" opacity="0" style="animation:l8 12s infinite">&#x2502; &#x2716; [MAP-001] dist/payments.js.map</text>
+<text class="t" x="32" y="216" fill="#c9d1d9" opacity="0" style="animation:l9 12s infinite">&#x2502;   Source map file detected in package</text>
+<text class="t" x="32" y="234" fill="#6e7681" opacity="0" style="animation:l10 12s infinite">&#x2502;   Source maps expose original source code. This is the exact vuln&#x2026;</text>
+
+<!-- SEC-001 -->
+<text class="t" x="32" y="252" fill="#ff7b72" opacity="0" style="animation:l11 12s infinite">&#x2502; &#x2716; [SEC-001] .env</text>
+<text class="t" x="32" y="270" fill="#c9d1d9" opacity="0" style="animation:l12 12s infinite">&#x2502;   Sensitive file detected in package</text>
+<text class="t" x="32" y="288" fill="#6e7681" opacity="0" style="animation:l13 12s infinite">&#x2502;   Matched pattern: .env</text>
+
+<!-- SEC-002 -->
+<text class="t" x="32" y="306" fill="#ff7b72" opacity="0" style="animation:l14 12s infinite">&#x2502; &#x2716; [SEC-002] .env</text>
+<text class="t" x="32" y="324" fill="#c9d1d9" opacity="0" style="animation:l15 12s infinite">&#x2502;   Potential secret detected: AWS Access Key ID</text>
+<text class="t" x="32" y="342" fill="#6e7681" opacity="0" style="animation:l16 12s infinite">&#x2502;   Value redacted.</text>
+
+<!-- CRITICAL close bar  plain -->
+<text class="t" x="32" y="360" fill="#c9d1d9" opacity="0" style="animation:l17 12s infinite">&#x2514;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;</text>
+
+<!-- HIGH block  same red -->
+<text class="t" x="32" y="386" fill="#ff7b72" opacity="0" style="animation:l18 12s infinite">&#x250c;&#x2500; HIGH (1)</text>
+
+<!-- MAP-002 -->
+<text class="t" x="32" y="404" fill="#ff7b72" opacity="0" style="animation:l19 12s infinite">&#x2502; &#x2716; [MAP-002] dist/payments.min.js</text>
+<text class="t" x="32" y="422" fill="#c9d1d9" opacity="0" style="animation:l20 12s infinite">&#x2502;   sourceMappingURL reference found</text>
+<text class="t" x="32" y="440" fill="#6e7681" opacity="0" style="animation:l21 12s infinite">&#x2502;   Points to: payments.js.map</text>
+
+<!-- HIGH close bar  plain -->
+<text class="t" x="32" y="458" fill="#c9d1d9" opacity="0" style="animation:l22 12s infinite">&#x2514;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;</text>
+
+<!-- MEDIUM block  \033[93m = #e3b341 -->
+<text class="t" x="32" y="484" fill="#e3b341" opacity="0" style="animation:l23 12s infinite">&#x250c;&#x2500; MEDIUM (1)</text>
+
+<!-- INT-001 -->
+<text class="t" x="32" y="502" fill="#e3b341" opacity="0" style="animation:l24 12s infinite">&#x2502; &#x26a0; [INT-001] .claude/settings.json</text>
+<text class="t" x="32" y="520" fill="#c9d1d9" opacity="0" style="animation:l25 12s infinite">&#x2502;   Internal/development artifact detected in package</text>
+<text class="t" x="32" y="538" fill="#6e7681" opacity="0" style="animation:l26 12s infinite">&#x2502;   Matched pattern: **/.claude/**</text>
+
+<!-- MEDIUM close bar  plain -->
+<text class="t" x="32" y="556" fill="#c9d1d9" opacity="0" style="animation:l27 12s infinite">&#x2514;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;</text>
+
+<!-- BLOCKED  \033[91m red -->
+<text class="t" x="32" y="582" fill="#ff7b72" opacity="0" style="animation:l28 12s infinite">&#x2716; BLOCKED: 5 finding(s) &#x2014; 3 critical, 1 high. DO NOT PUBLISH.</text>
+
+</g>
 </svg>
