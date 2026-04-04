@@ -216,6 +216,7 @@ Running `tenter scan` on Claude Code v2.1.88 before publish would have produced:
 
 ## Also by goweft
 
+- **[tenter-rs](https://github.com/goweft/tenter-rs)** — tenter v2, Rust static binary, no Python required
 - **[heddle](https://github.com/goweft/heddle)** — Policy-and-trust layer for MCP tool servers
 - **[unshear](https://github.com/goweft/unshear)** — AI agent fork divergence detector
 
