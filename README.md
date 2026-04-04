@@ -4,6 +4,8 @@
 
 Pre-publish artifact integrity scanner. Catches source maps, debug artifacts, secrets, and sensitive files in your package — the things that slip through `.gitignore` and land in production.
 
+> **tenter v2 is now available** — rewritten in Rust as a memory-safe static binary with no Python requirement, ~1s GitHub Action startup vs 10–15s, and ReDoS-safe regex by design. **[→ tenter-rs](https://github.com/goweft/tenter-rs)**
+
 Existing tools scan source repos for CVEs and credentials. None inspect the **final published artifact** for debug files, oversized anomalies, or internal development artifacts that should never ship. Tenter fills that gap.
 
 ## Why This Exists
@@ -11,7 +13,6 @@ Existing tools scan source repos for CVEs and credentials. None inspect the **fi
 Every package manager has the same blind spot: what you publish is not what you lint. A `.env` file excluded from git still ends up in `npm pack`. A 60MB source map survives tree-shaking because nobody checks the tarball. Internal directories like `.claude/` or `__pycache__/` ride along because no gate exists between `git push` and `npm publish`.
 
 The Claude Code npm leak (March 31, 2026) proved how costly this gap is — a single missing `.npmignore` entry shipped 512,000 lines of proprietary source via a 59.8MB source map, triggering 82,000+ forks and supply chain attacks within hours. But the failure class is general: **any team without a pre-publish artifact check is exposed.**
-
 
 ```bash
 # Install
@@ -61,7 +62,20 @@ AWS access keys and secrets, GitHub PATs (classic and fine-grained), GitHub OAut
 
 ## CI Integration
 
-### GitHub Actions
+### GitHub Actions — v2 Rust (recommended)
+
+No Python setup required. Downloads a static binary in ~1s:
+
+```yaml
+- name: Scan package before publish
+  uses: goweft/tenter-rs@v2
+  with:
+    target: ./dist
+    format: sarif
+    fail-on: high
+```
+
+### GitHub Actions — v1 Python
 
 ```yaml
 name: Publish Guard
@@ -219,9 +233,7 @@ Running `tenter scan` on Claude Code v2.1.88 before publish would have produced:
 - **[tenter-rs](https://github.com/goweft/tenter-rs)** — tenter v2, Rust static binary, no Python required
 - **[heddle](https://github.com/goweft/heddle)** — Policy-and-trust layer for MCP tool servers
 - **[unshear](https://github.com/goweft/unshear)** — AI agent fork divergence detector
-
 - **[ratine](https://github.com/goweft/ratine)** — Agent memory poisoning detector
-
 - **[crocking](https://github.com/goweft/crocking)** — AI authorship detector for git repositories
 
 ## License
