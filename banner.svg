@@ -1,34 +1,77 @@
-<svg width="1280" viewBox="0 0 680 280" xmlns="http://www.w3.org/2000/svg">
-<rect x="0" y="0" width="680" height="280" rx="12" fill="#f8f7f4"/>
-<g transform="translate(60, 50)">
-  <rect x="0" y="0" width="180" height="180" rx="4" fill="none" stroke="#2c2c2a" stroke-width="2" opacity="0.15"/>
-  <line x1="30" y1="0" x2="30" y2="180" stroke="#378ADD" stroke-width="1.5" opacity="0.6"/>
-  <line x1="60" y1="0" x2="60" y2="180" stroke="#378ADD" stroke-width="1.5" opacity="0.7"/>
-  <line x1="90" y1="0" x2="90" y2="180" stroke="#378ADD" stroke-width="1.5" opacity="0.8"/>
-  <line x1="120" y1="0" x2="120" y2="180" stroke="#378ADD" stroke-width="1.5" opacity="0.7"/>
-  <line x1="150" y1="0" x2="150" y2="180" stroke="#378ADD" stroke-width="1.5" opacity="0.6"/>
-  <line x1="0" y1="30" x2="180" y2="30" stroke="#1D9E75" stroke-width="1.5" opacity="0.6"/>
-  <line x1="0" y1="60" x2="180" y2="60" stroke="#1D9E75" stroke-width="1.5" opacity="0.7"/>
-  <line x1="0" y1="90" x2="180" y2="90" stroke="#1D9E75" stroke-width="1.5" opacity="0.8"/>
-  <line x1="0" y1="120" x2="180" y2="120" stroke="#1D9E75" stroke-width="1.5" opacity="0.7"/>
-  <line x1="0" y1="150" x2="180" y2="150" stroke="#1D9E75" stroke-width="1.5" opacity="0.6"/>
-  <circle cx="30" cy="0" r="3" fill="#378ADD" opacity="0.8"/>
-  <circle cx="60" cy="0" r="3" fill="#378ADD" opacity="0.8"/>
-  <circle cx="90" cy="0" r="3" fill="#378ADD" opacity="0.8"/>
-  <circle cx="120" cy="0" r="3" fill="#378ADD" opacity="0.8"/>
-  <circle cx="150" cy="0" r="3" fill="#378ADD" opacity="0.8"/>
-  <circle cx="30" cy="180" r="3" fill="#378ADD" opacity="0.8"/>
-  <circle cx="60" cy="180" r="3" fill="#378ADD" opacity="0.8"/>
-  <circle cx="90" cy="180" r="3" fill="#378ADD" opacity="0.8"/>
-  <circle cx="120" cy="180" r="3" fill="#378ADD" opacity="0.8"/>
-  <circle cx="150" cy="180" r="3" fill="#378ADD" opacity="0.8"/>
-  <path d="M78 78 L90 70 L102 78 L102 100 C102 110 90 118 90 118 C90 118 78 110 78 100Z" fill="none" stroke="#1D9E75" stroke-width="2" opacity="0.9"/>
-  <path d="M84 94 L88 98 L96 86" fill="none" stroke="#1D9E75" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-</g>
-<text x="280" y="110" font-family="system-ui, -apple-system, sans-serif" font-size="42" font-weight="500" fill="#2c2c2a" letter-spacing="-1">tenter</text>
-<text x="280" y="145" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="400" fill="#5f5e5a">pre-publish artifact integrity scanner</text>
-<text x="280" y="185" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="400" fill="#888780">holds your package taut before release</text>
-<text x="280" y="202" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="400" fill="#888780">catches source maps, debug artifacts, and secrets</text>
-<rect x="280" y="222" width="56" height="22" rx="4" fill="#f1efe8" stroke="#d3d1c7" stroke-width="0.5"/>
-<text x="308" y="237" font-family="monospace" font-size="10" font-weight="400" fill="#888780" text-anchor="middle">goweft</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640" width="1280" height="640">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap');
+    </style>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1280" height="640" fill="#f0ede8"/>
+  
+  <!-- === LEFT ILLUSTRATION === -->
+  <g transform="translate(80, 100)">
+    
+    <!-- Back window (package/artifact) -->
+    <g transform="translate(0, 20)">
+      <rect x="0" y="0" width="260" height="340" rx="8" fill="none" stroke="#b8c4cf" stroke-width="2"/>
+      <circle cx="20" cy="20" r="4" fill="#c8d0d8"/>
+      <circle cx="34" cy="20" r="4" fill="#c8d0d8"/>
+      <circle cx="48" cy="20" r="4" fill="#c8d0d8"/>
+      <rect x="20" y="50" width="140" height="8" rx="4" fill="#c8d0d8"/>
+      <rect x="20" y="70" width="100" height="8" rx="4" fill="#c8d0d8"/>
+      <rect x="20" y="90" width="180" height="8" rx="4" fill="#9db5c8"/>
+      <rect x="20" y="110" width="120" height="8" rx="4" fill="#c8d0d8"/>
+      <rect x="20" y="140" width="160" height="8" rx="4" fill="#c8d0d8"/>
+      <rect x="20" y="160" width="90" height="8" rx="4" fill="#c8d0d8"/>
+      <rect x="20" y="180" width="200" height="8" rx="4" fill="#9db5c8"/>
+      <rect x="20" y="200" width="130" height="8" rx="4" fill="#c8d0d8"/>
+      <rect x="20" y="230" width="110" height="8" rx="4" fill="#c8d0d8"/>
+      <rect x="20" y="250" width="170" height="8" rx="4" fill="#c8d0d8"/>
+      <rect x="20" y="270" width="80" height="8" rx="4" fill="#c8d0d8"/>
+      <rect x="20" y="290" width="150" height="8" rx="4" fill="#c8d0d8"/>
+    </g>
+    
+    <!-- Middle scanning beam element -->
+    <g transform="translate(145, 10)">
+      <rect x="0" y="0" width="16" height="390" rx="8" fill="#7ba3c9" opacity="0.6"/>
+      <circle cx="8" cy="195" r="18" fill="none" stroke="#5a8ab5" stroke-width="2.5"/>
+      <line x1="20" y1="207" x2="32" y2="219" stroke="#5a8ab5" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="-10" y1="120" x2="38" y2="120" stroke="#7ba3c9" stroke-width="1" opacity="0.4"/>
+      <line x1="-10" y1="270" x2="38" y2="270" stroke="#7ba3c9" stroke-width="1" opacity="0.4"/>
+    </g>
+    
+    <!-- Front window (scan results) -->
+    <g transform="translate(180, 50)">
+      <rect x="0" y="0" width="280" height="340" rx="8" fill="#f0ede8" stroke="#8bbfb0" stroke-width="2"/>
+      <circle cx="20" cy="20" r="4" fill="#b8d4c8"/>
+      <circle cx="34" cy="20" r="4" fill="#b8d4c8"/>
+      <circle cx="48" cy="20" r="4" fill="#b8d4c8"/>
+      <rect x="20" y="50" width="200" height="10" rx="4" fill="#8bbfb0"/>
+      <rect x="20" y="72" width="160" height="8" rx="4" fill="#c8d8d0"/>
+      <rect x="20" y="92" width="220" height="8" rx="4" fill="#c8d8d0"/>
+      <rect x="16" y="115" width="248" height="28" rx="4" fill="#e8c87a" opacity="0.25"/>
+      <rect x="24" y="123" width="10" height="10" rx="2" fill="#d4a843"/>
+      <rect x="42" y="125" width="180" height="8" rx="4" fill="#c8b880"/>
+      <rect x="20" y="155" width="140" height="8" rx="4" fill="#c8d8d0"/>
+      <rect x="20" y="175" width="190" height="8" rx="4" fill="#c8d8d0"/>
+      <rect x="16" y="198" width="248" height="28" rx="4" fill="#d98a8a" opacity="0.2"/>
+      <rect x="24" y="206" width="10" height="10" rx="2" fill="#c45a5a"/>
+      <rect x="42" y="208" width="160" height="8" rx="4" fill="#c8a0a0"/>
+      <rect x="20" y="240" width="170" height="8" rx="4" fill="#c8d8d0"/>
+      <rect x="20" y="260" width="120" height="8" rx="4" fill="#c8d8d0"/>
+      <rect x="20" y="288" width="100" height="10" rx="4" fill="#8bbfb0"/>
+      <polyline points="230,290 238,298 252,280" fill="none" stroke="#6aaa90" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </g>
+  
+  <!-- === RIGHT TEXT === -->
+  <g transform="translate(660, 160)">
+    <text font-family="Inter, -apple-system, system-ui, sans-serif" font-size="82" font-weight="700" fill="#2a2a2a" letter-spacing="-2">tenter</text>
+    <text y="70" font-family="Inter, -apple-system, system-ui, sans-serif" font-size="28" font-weight="600" fill="#4a4a4a">pre-publish artifact scanner</text>
+    <text y="140" font-family="Inter, -apple-system, system-ui, sans-serif" font-size="21" font-weight="400" fill="#888880">scan what ships, not what's committed</text>
+    <text y="172" font-family="Inter, -apple-system, system-ui, sans-serif" font-size="21" font-weight="400" fill="#888880">secrets · source maps · debug artifacts</text>
+    <text y="210" font-family="Inter, -apple-system, system-ui, sans-serif" font-size="16" font-weight="400" fill="#aaa8a0">zero dependencies · python · sarif · github action</text>
+    <rect y="248" width="82" height="34" rx="6" fill="none" stroke="#c8c4bc" stroke-width="1.5"/>
+    <text x="41" y="271" font-family="'SF Mono', 'Fira Code', Consolas, monospace" font-size="15" font-weight="400" fill="#6a6860" text-anchor="middle">goweft</text>
+  </g>
 </svg>
