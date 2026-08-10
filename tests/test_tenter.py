@@ -420,6 +420,81 @@ class TestReDoSProtection:
         assert not any(f.rule_id == "SEC-003" for f in result.findings)
 
 
+class TestVcsPruningAndAggregation:
+    """VCS metadata pruning on directory scans; INT-001 dir aggregation.
+
+    Parity with tenter-rs v2.1.1: the CI self-scan pattern (scan a checkout)
+    was emitting one INT-001 per hash-named .git object, churning SARIF
+    alerts on every commit.
+    """
+
+    def test_directory_scan_prunes_vcs_dirs(self):
+        tmpdir = make_temp_dir_with_files({
+            ".git/objects/ab/cdef0123456789": b"x\x01compressed",
+            ".git/HEAD": "ref: refs/heads/main",
+            ".hg/store/data/x.i": "hg",
+            "index.js": "console.log('clean');",
+        })
+        guard = PublishGuard()
+        result = guard.scan_directory(tmpdir)
+        assert result.total_files == 1, f"VCS files enumerated: {result.total_files}"
+        assert not [f for f in result.findings if f.rule_id == "INT-001"]
+
+    def test_tarball_git_dir_flagged_once(self):
+        tarball = make_tarball({
+            ".git/objects/ab/cdef0123456789": b"x\x01aa",
+            ".git/objects/cd/0123456789abcd": b"x\x01bb",
+            ".git/HEAD": "ref: refs/heads/main",
+            "index.js": "module.exports = 1;",
+        })
+        guard = PublishGuard()
+        result = guard.scan_npm_tarball(tarball)
+        int_findings = [f for f in result.findings if f.rule_id == "INT-001"]
+        assert len(int_findings) == 1, f"expected 1 aggregated finding, got {len(int_findings)}"
+        assert int_findings[0].file_path == ".git"
+        assert "3 file(s)" in int_findings[0].detail
+
+    def test_internal_dir_aggregated_one_finding(self):
+        tmpdir = make_temp_dir_with_files({
+            "node_modules/a/index.js": "module.exports = 1;",
+            "node_modules/a/lib/util.js": "module.exports = 2;",
+            "node_modules/b/index.js": "module.exports = 3;",
+        })
+        guard = PublishGuard()
+        result = guard.scan_directory(tmpdir)
+        int_findings = [f for f in result.findings if f.rule_id == "INT-001"]
+        assert len(int_findings) == 1
+        assert int_findings[0].file_path == "node_modules"
+
+    def test_secret_inside_internal_dir_still_detected(self):
+        tmpdir = make_temp_dir_with_files({
+            "node_modules/evil/config.js": 'const key = "AKIAIOSFODNN7EXAMPLE";',
+        })
+        guard = PublishGuard()
+        result = guard.scan_directory(tmpdir)
+        assert [f for f in result.findings if f.rule_id == "SEC-002"]
+
+    def test_no_perfile_finding_inside_internal_dir(self):
+        tmpdir = make_temp_dir_with_files({
+            "__pycache__/mod.cpython-311.pyc": b"\x00pyc",
+        })
+        guard = PublishGuard()
+        result = guard.scan_directory(tmpdir)
+        int_findings = [f for f in result.findings if f.rule_id == "INT-001"]
+        assert len(int_findings) == 1
+        assert int_findings[0].file_path == "__pycache__"
+
+    def test_standalone_pyc_still_perfile(self):
+        tmpdir = make_temp_dir_with_files({
+            "build/mod.pyc": b"\x00pyc",
+        })
+        guard = PublishGuard()
+        result = guard.scan_directory(tmpdir)
+        int_findings = [f for f in result.findings if f.rule_id == "INT-001"]
+        assert len(int_findings) == 1
+        assert int_findings[0].file_path == "build/mod.pyc"
+
+
 def run_tests():
     """Simple test runner. No dependencies required."""
     test_classes = [
@@ -435,6 +510,7 @@ def run_tests():
         TestAutoDetection,
         TestCLI,
         TestReDoSProtection,
+        TestVcsPruningAndAggregation,
     ]
 
     total = 0

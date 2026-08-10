@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tenter"
-version = "0.1.0"
+version = "0.1.1"
 description = "Tenter — pre-publish artifact integrity scanner. Holds your package taut before release, catching source maps, debug artifacts, and secrets before they ship."
 readme = "README.md"
 license = "MIT"

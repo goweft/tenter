@@ -29,7 +29,7 @@ from pathlib import Path
 from typing import Optional
 
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 # ─── Severity ────────────────────────────────────────────────────────────────
 
@@ -176,26 +176,81 @@ SENSITIVE_FILE_PATTERNS = [
 ]
 
 # Internal / development artifact patterns
-INTERNAL_ARTIFACT_PATTERNS = [
-    "**/.claude/**",
+# INT-001 patterns that match individual files. One finding per file.
+INTERNAL_FILE_PATTERNS = [
     "**/CLAUDE.md",
-    "**/.cursor/**",
     "**/.vscode/settings.json",
-    "**/.idea/**",
     "**/tsconfig.tsbuildinfo",
     "**/.eslintcache",
-    "**/coverage/**",
-    "**/__pycache__/**",
     "**/*.pyc",
-    "**/node_modules/**",
-    "**/.git/**",
     "**/Thumbs.db",
     "**/.DS_Store",
-    "**/.internal/**",
     "**/.internal.*",
     "**/TODO.internal*",
     "**/NOTES.internal*",
 ]
+
+# INT-001 patterns that match entire directories: (glob, directory segment).
+# Findings aggregate to ONE per directory instance — a stable path like
+# `node_modules`, never per contained file. Per-file findings on hash-named
+# contents (e.g. `.git/objects/ab/cdef…`) churn SARIF alerts on every commit.
+INTERNAL_DIR_PATTERNS = [
+    ("**/.claude/**", ".claude"),
+    ("**/.cursor/**", ".cursor"),
+    ("**/.idea/**", ".idea"),
+    ("**/coverage/**", "coverage"),
+    ("**/__pycache__/**", "__pycache__"),
+    ("**/node_modules/**", "node_modules"),
+    ("**/.git/**", ".git"),
+    ("**/.internal/**", ".internal"),
+]
+
+# VCS metadata directories pruned from DIRECTORY scans. A working-tree scan
+# is pre-publish: npm, Python build backends, and cargo all unconditionally
+# exclude these, so flagging them is a false positive by definition. Inside
+# an ARCHIVE they are not pruned — there they actually shipped, and INT-001
+# fires (aggregated, via INTERNAL_DIR_PATTERNS).
+VCS_DIR_NAMES = frozenset({".git", ".hg", ".svn", ".bzr"})
+
+
+def _internal_dir_instance(rel_path: str):
+    """If rel_path sits inside an INTERNAL_DIR_PATTERNS directory, return
+    (instance_path, pattern) — the prefix up to and including the matching
+    segment. E.g. `pkg/node_modules/x/y.js` → (`pkg/node_modules`,
+    `**/node_modules/**`). Otherwise None."""
+    comps = rel_path.split("/")
+    if len(comps) < 2:
+        return None
+    for i, comp in enumerate(comps[:-1]):
+        for pattern, segment in INTERNAL_DIR_PATTERNS:
+            if comp == segment:
+                return ("/".join(comps[: i + 1]), pattern)
+    return None
+
+
+def _record_internal_dir(agg: dict, rel_path: str, size: int) -> bool:
+    """Record rel_path in the aggregator if inside an internal directory.
+    Returns True if it was (caller suppresses per-file INT-001)."""
+    hit = _internal_dir_instance(rel_path)
+    if hit is None:
+        return False
+    instance, pattern = hit
+    count, total, _ = agg.get(instance, (0, 0, pattern))
+    agg[instance] = (count + 1, total + size, pattern)
+    return True
+
+
+def _flush_internal_dirs(result: "ScanResult", agg: dict) -> None:
+    for instance in sorted(agg):
+        count, total, pattern = agg[instance]
+        result.findings.append(Finding(
+            rule_id="INT-001",
+            severity=Severity.MEDIUM,
+            file_path=instance,
+            message="Internal/development directory detected in package",
+            detail=f"Matched pattern: {pattern} — {count} file(s), "
+                   f"{total / (1024 * 1024):.1f} MB",
+        ))
 
 # Secret patterns (regex) — checked against file contents.
 #
@@ -263,7 +318,13 @@ class PublishGuard:
 
         for fp in root.rglob("*"):
             if fp.is_file():
-                rel = str(fp.relative_to(root))
+                rel_parts = fp.relative_to(root).parts
+                # Prune VCS metadata: a directory scan is a pre-publish working
+                # tree; every package manager excludes these unconditionally.
+                # Archives are NOT pruned — see VCS_DIR_NAMES.
+                if any(part in VCS_DIR_NAMES for part in rel_parts[:-1]):
+                    continue
+                rel = "/".join(rel_parts)
                 size = fp.stat().st_size
                 files.append((rel, size, fp))
                 total_size += size
@@ -276,10 +337,13 @@ class PublishGuard:
         )
 
         self._check_total_size(result, total_size)
+        dir_agg = {}
         for rel_path, size, full_path in files:
             if self._is_allowlisted(rel_path):
                 continue
-            self._check_file(result, rel_path, size, full_path)
+            in_internal_dir = _record_internal_dir(dir_agg, rel_path, size)
+            self._check_file(result, rel_path, size, full_path, in_internal_dir)
+        _flush_internal_dirs(result, dir_agg)
 
         return result
 
@@ -330,13 +394,18 @@ class PublishGuard:
         result.total_files = len(files)
         project_root = Path(project_dir)
 
+        dir_agg = {}
         for rel_path in files:
             if self._is_allowlisted(rel_path):
                 continue
             full_path = project_root / rel_path
             size = full_path.stat().st_size if full_path.exists() else 0
             result.total_size_bytes += size
-            self._check_file(result, rel_path, size, full_path if full_path.exists() else None)
+            in_internal_dir = _record_internal_dir(dir_agg, rel_path, size)
+            self._check_file(result, rel_path, size,
+                             full_path if full_path.exists() else None,
+                             in_internal_dir)
+        _flush_internal_dirs(result, dir_agg)
 
         self._check_total_size(result, result.total_size_bytes)
         return result
@@ -361,6 +430,7 @@ class PublishGuard:
             total_size_bytes=0,
         )
 
+        dir_agg = {}
         try:
             with tarfile.open(path, "r:*") as tar:
                 members = [m for m in tar.getmembers() if m.isfile()]
@@ -380,10 +450,12 @@ class PublishGuard:
                         continue
 
                     # Extract to temp for content scanning
+                    in_internal_dir = _record_internal_dir(dir_agg, rel_path, member.size)
                     with tempfile.TemporaryDirectory() as tmpdir:
                         tar.extract(member, tmpdir, filter="data")
                         extracted = Path(tmpdir) / member.name
-                        self._check_file(result, rel_path, member.size, extracted)
+                        self._check_file(result, rel_path, member.size, extracted,
+                                         in_internal_dir)
 
         except (tarfile.TarError, OSError) as e:
             result.findings.append(Finding(
@@ -393,6 +465,7 @@ class PublishGuard:
                 message=f"Failed to read tarball: {e}",
             ))
 
+        _flush_internal_dirs(result, dir_agg)
         return result
 
     def _scan_zipfile(self, path: str, pkg_type: str) -> ScanResult:
@@ -403,6 +476,7 @@ class PublishGuard:
             total_size_bytes=0,
         )
 
+        dir_agg = {}
         try:
             with zipfile.ZipFile(path, "r") as zf:
                 infos = [i for i in zf.infolist() if not i.is_dir()]
@@ -429,7 +503,10 @@ class PublishGuard:
                             continue
                         zf.extract(info, tmpdir)
                         extracted = Path(tmpdir) / info.filename
-                        self._check_file(result, info.filename, info.file_size, extracted)
+                        in_internal_dir = _record_internal_dir(
+                            dir_agg, info.filename, info.file_size)
+                        self._check_file(result, info.filename, info.file_size,
+                                         extracted, in_internal_dir)
 
         except (zipfile.BadZipFile, OSError) as e:
             result.findings.append(Finding(
@@ -439,11 +516,17 @@ class PublishGuard:
                 message=f"Failed to read zip: {e}",
             ))
 
+        _flush_internal_dirs(result, dir_agg)
         return result
 
     def _check_file(self, result: ScanResult, rel_path: str, size: int,
-                     full_path: Optional[Path]):
-        """Run all checks against a single file."""
+                     full_path: Optional[Path], in_internal_dir: bool = False):
+        """Run all checks against a single file.
+
+        in_internal_dir: True when the file lies inside an aggregated internal
+        directory (see INTERNAL_DIR_PATTERNS) — per-file INT-001 is suppressed
+        because the directory-level finding covers it; all other checks
+        (MAP/SEC/SIZE) still run."""
 
         # Rule: Source map files
         lower = rel_path.lower()
@@ -503,17 +586,19 @@ class PublishGuard:
                 ))
                 break
 
-        # Rule: Internal artifacts
-        for pattern in INTERNAL_ARTIFACT_PATTERNS:
-            if self._glob_match(rel_path, pattern):
-                result.findings.append(Finding(
-                    rule_id="INT-001",
-                    severity=Severity.MEDIUM,
-                    file_path=rel_path,
-                    message="Internal/development artifact detected in package",
-                    detail=f"Matched pattern: {pattern}",
-                ))
-                break
+        # Rule: Internal artifacts (per-file patterns; directory patterns are
+        # aggregated by the caller — see INTERNAL_DIR_PATTERNS)
+        if not in_internal_dir:
+            for pattern in INTERNAL_FILE_PATTERNS:
+                if self._glob_match(rel_path, pattern):
+                    result.findings.append(Finding(
+                        rule_id="INT-001",
+                        severity=Severity.MEDIUM,
+                        file_path=rel_path,
+                        message="Internal/development artifact detected in package",
+                        detail=f"Matched pattern: {pattern}",
+                    ))
+                    break
 
         # Rule: File size anomalies
         if size > self.size_limit_single:
